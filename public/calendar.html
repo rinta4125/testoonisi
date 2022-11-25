@@ -15,8 +15,57 @@
   <button id="show">表示</button>
   <nobr id = "comment_op"></nobr>
   <nobr id = "time_op"></nobr>
-
+  <table border="1">
+    <tr>
+      <th>日</th>
+      <th>月</th>
+      <th>火</th>
+      <th>水</th>
+      <th>木</th>
+      <th>金</th>
+      <th>土</th>
+    </tr>
+    <tr>
+      <th>days_op</th>
+      <th>days_op</th>
+      <th>days_op</th>
+      <th>days_op</th>
+      <th>days_op</th>
+      <th>days_op</th>
+      <th>days_op</th>
+    </tr>
+    <tr>
+      <th>days_op</th>
+      <th>days_op</th>
+      <th>days_op</th>
+      <th>days_op</th>
+      <th>days_op</th>
+      <th>days_op</th>
+      <th>days_op</th>
+    </tr>
+    <tr>
+      <th>days_op</th>
+      <th>days_op</th>
+      <th>days_op</th>
+      <th>days_op</th>
+      <th>days_op</th>
+      <th>days_op</th>
+      <th>days_op</th>
+    </tr>
+    <tr>
+      <th>days_op</th>
+      <th>days_op</th>
+      <th>days_op</th>
+      <th>days_op</th>
+      <th>days_op</th>
+      <th>days_op</th>
+      <th>days_op</th>
+    </tr>
+  </table>
+  
   <script type="module">
+    days_op=days;
+    days=1;
     async function reload(group, time){
       const response = await fetch("/code_info2", {
         method: "POST",
