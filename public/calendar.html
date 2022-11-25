@@ -65,8 +65,9 @@
   </table>
   
   <script type="module">
-    days_op.text=days;
-    days=ああああああああ;
+    days_op.textcontent=days;
+    days='aaaaa';
+
     async function reload(group, time){
       const response = await fetch("/code_info2", {
         method: "POST",
@@ -83,9 +84,7 @@
           let sche_start = data2[1];
           let sche_end = data2[2];
           let comment = data2[3];
-
           comment_op.textContent = comment;
-
           console.log('------------------------------------');
           console.log(created_at);
           console.log(sche_start);
