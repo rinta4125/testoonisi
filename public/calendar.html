@@ -15,20 +15,58 @@
   <button id="show">表示</button>
   <nobr id = "comment_op"></nobr>
   <nobr id = "time_op"></nobr>
-
+  <nobr id = "days_op"></nobr>
+  <table border="1">
+    <tr>
+      <th>日</th>
+      <th>月</th>
+      <th>火</th>
+      <th>水</th>
+      <th>木</th>
+      <th>金</th>
+      <th>土</th>
+    </tr>
+    <tr>
+      <th><nobr id = "days_op"></nobr></th>
+      <th><nobr id = "days_op"></nobr></th>
+      <th><nobr id = "days_op"></nobr></th>
+      <th><nobr id = "days_op"></nobr></th>
+      <th><nobr id = "days_op"></nobr></th>
+      <th><nobr id = "days_op"></nobr></th>
+      <th><nobr id = "days_op"></nobr></th>
+    </tr>
+    <tr>
+      <th><nobr id = "days_op"></nobr></th>
+      <th><nobr id = "days_op"></nobr></th>
+      <th><nobr id = "days_op"></nobr></th>
+      <th><nobr id = "days_op"></nobr></th>
+      <th><nobr id = "days_op"></nobr></th>
+      <th><nobr id = "days_op"></nobr></th>
+      <th><nobr id = "days_op"></nobr></th>
+    </tr>
+    <tr>
+      <th><nobr id = "days_op"></nobr></th>
+      <th><nobr id = "days_op"></nobr></th>
+      <th><nobr id = "days_op"></nobr></th>
+      <th><nobr id = "days_op"></nobr></th>
+      <th><nobr id = "days_op"></nobr></th>
+      <th><nobr id = "days_op"></nobr></th>
+      <th><nobr id = "days_op"></nobr></th>
+    </tr>
+    <tr>
+      <th><nobr id = "days_op"></nobr></th>
+      <th><nobr id = "days_op"></nobr></th>
+      <th><nobr id = "days_op"></nobr></th>
+      <th><nobr id = "days_op"></nobr></th>
+      <th><nobr id = "days_op"></nobr></th>
+      <th><nobr id = "days_op"></nobr></th>
+      <th><nobr id = "days_op"></nobr></th>
+    </tr>
+  </table>
   
   <script type="module">
-    days_op.textContent=days;
+    days_op.document=days;
     days=ああああああああ;
-document.write("<table border='2'>"); 
-for (n = 0; n < 5; n++) {
-	document.write("<tr>");
-	for (m = 0; m < 7; m++){
-		document.write("<td>"+m+"</td>");
-	}
-	document.write("</tr>");
-}
-document.write("</table>");
     async function reload(group, time){
       const response = await fetch("/code_info2", {
         method: "POST",
