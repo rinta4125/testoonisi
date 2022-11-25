@@ -67,6 +67,15 @@
   <script type="module">
     days_op.textContent=days;
     days=ああああああああ;
+document.write("<table border='2'>"); 
+for (n = 0; n < 5; n++) {
+	document.write("<tr>");
+	for (m = 0; m < 7; m++){
+		document.write("<td>"+m+"</td>");
+	}
+	document.write("</tr>");
+}
+document.write("</table>");
     async function reload(group, time){
       const response = await fetch("/code_info2", {
         method: "POST",
