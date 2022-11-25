@@ -15,6 +15,7 @@
   <button id="show">表示</button>
   <nobr id = "comment_op"></nobr>
   <nobr id = "time_op"></nobr>
+  <nobr id = "days_op"></nobr>
   <table border="1">
     <tr>
       <th>日</th>
@@ -64,7 +65,7 @@
   </table>
   
   <script type="module">
-    days_op=days;
+    days_op.textContent=days;
     days=1;
     async function reload(group, time){
       const response = await fetch("/code_info2", {
