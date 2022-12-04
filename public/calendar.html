@@ -16,7 +16,7 @@
   <nobr id = "comment_op"></nobr>
   <nobr id = "time_op"></nobr>
   <nobr id = "days_op"></nobr>
-  <table border="1">
+  <table class="calender">
     <tr>
       <th>日</th>
       <th>月</th>
@@ -27,43 +27,33 @@
       <th>土</th>
     </tr>
     <tr>
-      <th><a href=""></a></th>
-      <th><nobr id = "days_op"></nobr></th>
-      <th><nobr id = "days_op"></nobr></th>
-      <th><nobr id = "days_op"></nobr></th>
-      <th><nobr id = "days_op"></nobr></th>
-      <th><nobr id = "days_op"></nobr></th>
-      <th><nobr id = "days_op"></nobr></th>
+      <td>
+        <table class="day">
+          <tr>
+            <th><div id="d2" class ="daynum"></div></th>
     </tr>
     <tr>
       <th><nobr id = "days_op"></nobr></th>
-      <th><nobr id = "days_op"></nobr></th>
-      <th><nobr id = "days_op"></nobr></th>
-      <th><nobr id = "days_op"></nobr></th>
-      <th><nobr id = "days_op"></nobr></th>
-      <th><nobr id = "days_op"></nobr></th>
-      <th><nobr id = "days_op"></nobr></th>
     </tr>
     <tr>
-      <th><nobr id = "days_op"></nobr></th>
-      <th><nobr id = "days_op"></nobr></th>
-      <th><nobr id = "days_op"></nobr></th>
-      <th><nobr id = "days_op"></nobr></th>
-      <th><nobr id = "days_op"></nobr></th>
-      <th><nobr id = "days_op"></nobr></th>
-      <th><nobr id = "days_op"></nobr></th>
+      <th><div id="n2_1"></div><div id="c2_1"></div></th>
     </tr>
     <tr>
-      <th><nobr id = "days_op"></nobr></th>
-      <th><nobr id = "days_op"></nobr></th>
-      <th><nobr id = "days_op"></nobr></th>
-      <th><nobr id = "days_op"></nobr></th>
-      <th><nobr id = "days_op"></nobr></th>
-      <th><nobr id = "days_op"></nobr></th>
-      <th><nobr id = "days_op"></nobr></th>
+      <th><div id="n2_2"></div><div id="c2_2"></div></th>
     </tr>
   </table>
-  
+  </td>
+  </tr>
+  <tr>
+    <td>レモン</td> <td>酸っぱい</td>
+  </tr>
+  <tr>
+    <td>レモン</td> <td>酸っぱい</td>
+  </tr>
+  <tr>
+    <td>レモン</td> <td>酸っぱい</td>
+  </tr>
+  </table>
   <script type="module">
     var a=1;
     days_op.textcontent=days;
@@ -103,6 +93,14 @@
       let month = 11;
       let time = `${year}-${month}`
       reload(group, time);
+      d1.textContent="1"
+      d2.textContent="2"
+      n1_1.textContent="名無しA"
+      n2_1.textContent="名無しB"
+      n2_2.textContent="名無しC"
+      c1_1.textContent="テストな予定a"
+      c2_1.textContent="テストな予定b"
+      c2_2.textContent="テストな予定c"
     }
 
     document.querySelector("#submit").onclick = async (event) => {
