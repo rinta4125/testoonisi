@@ -2,29 +2,6 @@ body {
   background: skyblue;
 }
 
-midasi {
-  position: relative;
-  top: 40px;
-  left: 30px;
-}
-
-honbun {
-  position: relative;
-  top: 30px;
-  left: 80px;
-}
-/*
-table  {
-  border: 1px solid #000;
-}
- 
-table th {
-  border: 1px solid #000;
-}
-table td {
-  border: 1px solid #000;
-}*/
-
 .calendar {
   border-collapse: collapse;
   table-layout: fixed;
