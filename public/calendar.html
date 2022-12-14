@@ -563,6 +563,32 @@
   </table>
 
   <script type="module">
+    async function reload(group, time){
+      const response = await fetch("/code_info2", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ group, time })
+      });
+      let result = await response.text();
+      if (result != 'Database Error'){
+        let data = result.split('@@');
+        
+        for (let i = 0; i < data.length-1; i++) {
+          let data2 = data[i].split('||');
+          let created_at = data2[0];
+          let sche_start = data2[1];
+          let sche_end = data2[2];
+          let comment = data2[3];
+          comment_op.textContent = comment;
+          console.log('------------------------------------');
+          console.log(created_at);
+          console.log(sche_start);
+          console.log(sche_end);
+          console.log(comment);
+
+        }
+      }
+    }
     function output_d(dates){
       d1.textContent = `${dates[0]}`;
       d2.textContent = `${dates[1]}`;
@@ -641,33 +667,6 @@
       c36_1.textContent = `${comments[35]}`;
       c37_1.textContent = `${comments[36]}`;
     }
-    async function reload(group, time){
-      const response = await fetch("/code_info2", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ group, time })
-      });
-      let result = await response.text();
-      if (result != 'Database Error'){
-        let data = result.split('@@');
-        
-        for (let i = 0; i < data.length-1; i++) {
-          let data2 = data[i].split('||');
-          let created_at = data2[0];
-          let sche_start = data2[1];
-          let sche_end = data2[2];
-          let comment = data2[3];
-          comment_op.textContent = comment;
-          console.log('------------------------------------');
-          console.log(created_at);
-          console.log(sche_start);
-          console.log(sche_end);
-          console.log(comment);
-
-        }
-      }
-    }
-
     window.onload = async (event) => {
       console.log('こんですー今から処理しますー');
       //const response = await fetch("/reset_obj"); // GET
