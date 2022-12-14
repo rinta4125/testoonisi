@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html>
 
 <head>
@@ -12,10 +11,12 @@
   <input id="sche_start_ip" type="datetime-local" />
   <input id="sche_end_ip" type="datetime-local" />
   <button id="submit">送信</button>
-  <button id="show">表示</button>
-  <nobr id = "comment_op"></nobr>
-  <nobr id = "time_op"></nobr>
-  <nobr id = "days_op"></nobr>
+  <button id="update">更新</button>
+  <button id="back"><前の月</button>
+  <button id="next">次の月></button>
+  <div id = "comment_op"></div>
+  <div id = "result_op"></div>
+
   <table class="calendar">
     <tr>
       <th>日</th> <th>月</th> <th>火</th> <th>水</th> <th>木</th> <th>金</th> <th>土</th>
@@ -507,8 +508,6 @@
 
       </td>
     </tr>
-
-
     <tr>
       <td>
 
@@ -528,7 +527,7 @@
 
       </td>
       <td>
-
+        
 
         <table class="day">
           <tr>
@@ -538,7 +537,7 @@
             <th><div id = "n30_1"></div><div id = "c30_1"></div></th>
           </tr>
           <tr>
-            <th><div id = "n30_1"></div><div id = "c30_2"></div></th>
+            <th><div id = "n30_2"></div><div id = "c30_2"></div></th>
           </tr>
         </table>
 
@@ -558,34 +557,126 @@
             <th><div id = "n31_2"></div><div id = "c31_2"></div></th>
           </tr>
         </table>
+
+
+      </td>
+      <td>
+
+
+        <table class="day">
+          <tr>
+            <th><div id = "d32" class = "daynum"></div></th>
+          </tr>
+          <tr>
+            <th><div id = "n32_1"></div><div id = "c32_1"></div></th>
+          </tr>
+          <tr>
+            <th><div id = "n32_2"></div><div id = "c32_2"></div></th>
+          </tr>
+        </table>
+
+
+      </td>
+      <td>
+
+
+        <table class="day">
+          <tr>
+            <th><div id = "d33" class = "daynum"></div></th>
+          </tr>
+          <tr>
+            <th><div id = "n33_1"></div><div id = "c33_1"></div></th>
+          </tr>
+          <tr>
+            <th><div id = "n33_2"></div><div id = "c33_2"></div></th>
+          </tr>
+        </table>
+
+
+      </td>
+      <td>
+
+
+        <table class="day">
+          <tr>
+            <th><div id = "d34" class = "daynum"></div></th>
+          </tr>
+          <tr>
+            <th><div id = "n34_1"></div><div id = "c34_1"></div></th>
+          </tr>
+          <tr>
+            <th><div id = "n34_2"></div><div id = "c34_2"></div></th>
+          </tr>
+        </table>
+
+
+      </td>
+      <td>
+
+
+        <table class="day">
+          <tr>
+            <th><div id = "d35" class = "daynum"></div></th>
+          </tr>
+          <tr>
+            <th><div id = "n35_1"></div><div id = "c35_1"></div></th>
+          </tr>
+          <tr>
+            <th><div id = "n35_2"></div><div id = "c35_2"></div></th>
+          </tr>
+        </table>
+
+
+      </td>
+    </tr>
+    <tr>
+      <td>
+
+
+        <table class="day">
+          <tr>
+            <th><div id = "d36" class = "daynum"></div></th>
+          </tr>
+          <tr>
+            <th><div id = "n36_1"></div><div id = "c36_1"></div></th>
+          </tr>
+          <tr>
+            <th><div id = "n36_2"></div><div id = "c36_2"></div></th>
+          </tr>
+        </table>
+
+
+      </td>
+      <td>
+        
+
+        <table class="day">
+          <tr>
+            <th><div id = "d37" class = "daynum"></div></th>
+          </tr>
+          <tr>
+            <th><div id = "n37_1"></div><div id = "c37_1"></div></th>
+          </tr>
+          <tr>
+            <th><div id = "n37_2"></div><div id = "c37_2"></div></th>
+          </tr>
+        </table>
+
+
       </td>
     </tr>
   </table>
 
   <script type="module">
-    async function reload(group, time){
-      const response = await fetch("/code_info2", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ group, time })
-      });
-      let result = await response.text();
-      if (result != 'Database Error'){
-        let data = result.split('@@');
-        
-        for (let i = 0; i < data.length-1; i++) {
-          let data2 = data[i].split('||');
-          let created_at = data2[0];
-          let sche_start = data2[1];
-          let sche_end = data2[2];
-          let comment = data2[3];
-          comment_op.textContent = comment;
-          console.log('------------------------------------');
-          console.log(created_at);
-          console.log(sche_start);
-          console.log(sche_end);
-          console.log(comment);
-          function output_d(dates){
+    let group;
+    let username;
+    let d = new Date();
+    let year = d.getFullYear();
+    let month = d.getMonth() + 1;
+    let time = `${year}-${month}`;
+    let monthLen = [ 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 ];
+
+    function output_d(dates){
       d1.textContent = `${dates[0]}`;
       d2.textContent = `${dates[1]}`;
       d3.textContent = `${dates[2]}`;
@@ -624,6 +715,7 @@
       d36.textContent = `${dates[35]}`;
       d37.textContent = `${dates[36]}`;
     }
+    
     function output_c(comments){
       c1_1.textContent = `${comments[0]}`;
       c2_1.textContent = `${comments[1]}`;
@@ -663,38 +755,148 @@
       c36_1.textContent = `${comments[35]}`;
       c37_1.textContent = `${comments[36]}`;
     }
+
+    // time変数の年月の予定を取得する
+    async function reload(){
+      let dates = [];
+      let comments = [];
+      const response = await fetch("/download", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ group, time })
+      });
+      let result = await response.text();
+      if (result != 'Database Error'){
+        let data = result.split('@@');
+        
+        for (let i = 0; i < data.length-1; i++) {
+          let data2 = data[i].split('||');
+          let created_at = data2[0];
+          let user = data2[1];
+          let sche_start = data2[2];
+          let sche_end = data2[3];
+          let comment = data2[4];
+
+          comments[comments.length] = comment;
         }
+
+        
+        let zure = calendarZure(year, month);
+        let i;
+
+        if (zure != 6) {
+          for (i = 0; i < zure + 1; i++) {
+            dates[dates.length] = "";
+          }
+        }
+
+        for (i = 1; i <= monthLen[month - 1]; i++) {
+          dates[dates.length] = i;
+        }
+
+        if (dates.length != 37){
+          i = 36;
+          while (dates[i] === undefined){
+            dates[i] = "";
+            i--;
+          }
+        }
+      }else{
+        alert("Database Error");
       }
+
+      output_d(dates);
+      output_c(comments);
     }
-    
+
+    // 指定した年、月を引数に入れると、月曜日からのズレを整数型で出力する。
+    // ズレが0の場合は月曜日始まり、ズレが5の場合は日曜日始まり。
+    function calendarZure(y, m){
+      let zure, i, cnt;
+      let monthLen_tmp = [ 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 ];
+
+      zure = (y - 1) * 365;
+      zure = zure + y / 4;
+      zure = zure + y / 400;
+      zure = zure - y / 100;
+      zure = zure % 7;
+      
+      if (y % 400 == 0) {
+        monthLen_tmp[1]++;
+        zure--;
+      } else if (y % 4 == 0 && y % 100 != 0) {
+        monthLen_tmp[1]++;
+        zure--;
+      }
+
+      if (m >= 2) {
+        for (i = 0; i < m - 1; i++) {
+          zure = zure + monthLen_tmp[i];
+        }
+        zure = zure % 7;
+      }
+
+      return Math.floor(zure);
+    }
+
+
+
+
     window.onload = async (event) => {
-      console.log('こんですー今から処理しますー');
+      const response = await fetch("/login_remove", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ })
+      });
+
       //const response = await fetch("/reset_obj"); // GET
-      let group = 1;
-      let year = 2022;
-      let month = 11;
-      let time = `${year}-${month}`
-      reload(group, time);
+      let result = await response.text();
+      let data = result.split('@@');
+      username = data[0];
+      group = data[1];
+
+      await reload();
+    }
+
+    document.querySelector("#update").onclick = async (event) => {
+      await reload();
+      calendarZure(year, month);
+    }
+
+    document.querySelector("#back").onclick = async (event) => {
+      month--;
+      if (month < 1) {
+        year--;
+        month = 12;
+      }
+      time = `${year}-${month}`;
+      await reload();
+    }
+
+    document.querySelector("#next").onclick = async (event) => {
+      month++;
+      if (month > 12) {
+        year++;
+        month = 1;
+      }
+      time = `${year}-${month}`;
+      await reload();
     }
 
     document.querySelector("#submit").onclick = async (event) => {
-      const group = 1;
       const sche_start = document.querySelector("#sche_start_ip").value;
       const sche_end = document.querySelector("#sche_end_ip").value;
       const comment = document.querySelector("#comment_ip").value;
-      
-      if (comment.includes('||') || comment.includes('@@')){
-        alert("no");
-      }else{
-        const response = await fetch("/code_info", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ group, sche_start, sche_end, comment })
-        });
-        let result = await response.text();
-        alert(result);
-      }
+
+      const response = await fetch("/send", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ group, username, sche_start, sche_end, comment })
+      });
+      let result = await response.text();
+      result_op.textContent = result;
     }
+    
   </script>
 
 </body>
