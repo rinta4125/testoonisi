@@ -29,10 +29,10 @@
             <th><div id = "d1" class = "daynum"></div></th>
           </tr>
           <tr>
-            <th><div id = "n1_1"></div><div id = "c1_1"></div></th>
+            <th id = "th1_1"><div id = "n1_1"></div><div id = "c1_1"></div></th>
           </tr>
           <tr>
-            <th><div id = "n1_2"></div><div id = "c1_2"></div></th>
+            <th id = "th1_2"><div id = "n1_2"></div><div id = "c1_2"></div></th>
           </tr>
         </table>
 
@@ -427,7 +427,28 @@
 
         <table class="day">
           <tr>
-            <th><div id = "d24" class = "daynum"></div></th>
+            <th>
+              <div id = "d24" class = "daynum"></div>
+
+              <!-- モーダルエリアここから -->
+              <section id="modalArea_24" class="modalArea">
+                <div id="modalBg_24" class="modalBg"></div>
+                <div class="modalWrapper">
+                  <div class="modalContents">
+                    <h1 id="modalH_24"></h1>
+                    <p id="modalP_24"></p>
+                  </div>
+                  <div id="closeModal_24" class="closeModal">
+                    ×
+                  </div>
+                </div>
+              </section>
+              <!-- モーダルエリアここまで -->
+
+              <!-- ↓body閉じタグ直前でjQueryを読み込む -->
+              <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+            </th>
           </tr>
           <tr>
             <th><div id = "n24_1"></div><div id = "c24_1"></div></th>
@@ -444,7 +465,29 @@
 
         <table class="day">
           <tr>
-            <th><div id = "d25" class = "daynum"></div></th>
+            <th>
+              
+              <div id = "d25" class = "daynum"></div>
+
+              <!-- モーダルエリアここから -->
+              <section id="modalArea_25" class="modalArea">
+                <div id="modalBg_25" class="modalBg"></div>
+                <div class="modalWrapper">
+                  <div class="modalContents">
+                    <h1 id="modalH_25"></h1>
+                    <p id="modalP_25"></p>
+                  </div>
+                  <div id="closeModal_25" class="closeModal">
+                    ×
+                  </div>
+                </div>
+              </section>
+              <!-- モーダルエリアここまで -->
+
+              <!-- ↓body閉じタグ直前でjQueryを読み込む -->
+              <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+            </th>
           </tr>
           <tr>
             <th><div id = "n25_1"></div><div id = "c25_1"></div></th>
@@ -673,7 +716,8 @@
     let d = new Date();
     let year = d.getFullYear();
     let month = d.getMonth() + 1;
-    let time = `${year}-${month}`;
+    let month_str = ('00' + month).slice(-2);
+    let time = `${year}-${month_str}`;
     let monthLen = [ 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 ];
 
     function output_d(dates){
@@ -714,6 +758,46 @@
       d35.textContent = `${dates[34]}`;
       d36.textContent = `${dates[35]}`;
       d37.textContent = `${dates[36]}`;
+    }
+
+    function output_n(users){
+      n1_1.textContent = `${users[0]}`;
+      n2_1.textContent = `${users[1]}`;
+      n3_1.textContent = `${users[2]}`;
+      n4_1.textContent = `${users[3]}`;
+      n5_1.textContent = `${users[4]}`;
+      n6_1.textContent = `${users[5]}`;
+      n7_1.textContent = `${users[6]}`;
+      n8_1.textContent = `${users[7]}`;
+      n9_1.textContent = `${users[8]}`;
+      n10_1.textContent = `${users[9]}`;
+      n11_1.textContent = `${users[10]}`;
+      n12_1.textContent = `${users[11]}`;
+      n13_1.textContent = `${users[12]}`;
+      n14_1.textContent = `${users[13]}`;
+      n15_1.textContent = `${users[14]}`;
+      n16_1.textContent = `${users[15]}`;
+      n17_1.textContent = `${users[16]}`;
+      n18_1.textContent = `${users[17]}`;
+      n19_1.textContent = `${users[18]}`;
+      n20_1.textContent = `${users[19]}`;
+      n21_1.textContent = `${users[20]}`;
+      n22_1.textContent = `${users[21]}`;
+      n23_1.textContent = `${users[22]}`;
+      n24_1.textContent = `${users[23]}`;
+      n25_1.textContent = `${users[24]}`;
+      n26_1.textContent = `${users[25]}`;
+      n27_1.textContent = `${users[26]}`;
+      n28_1.textContent = `${users[27]}`;
+      n29_1.textContent = `${users[28]}`;
+      n30_1.textContent = `${users[29]}`;
+      n31_1.textContent = `${users[30]}`;
+      n32_1.textContent = `${users[31]}`;
+      n33_1.textContent = `${users[32]}`;
+      n34_1.textContent = `${users[33]}`;
+      n35_1.textContent = `${users[34]}`;
+      n36_1.textContent = `${users[35]}`;
+      n37_1.textContent = `${users[36]}`;
     }
     
     function output_c(comments){
@@ -756,69 +840,12 @@
       c37_1.textContent = `${comments[36]}`;
     }
 
-    // time変数の年月の予定を取得する
-    async function reload(){
+    // 指定した年、月を引数に入れると、月曜日からのズレを計算する。
+    // 戻り値が0の場合は日曜日、1の場合は月曜日、6の場合は土曜日。
+    function ZureCalendar(y, m){
       let dates = [];
-      let comments = [];
-      const response = await fetch("/download", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ group, time })
-      });
-      let result = await response.text();
-      if (result != 'Database Error'){
-        let data = result.split('@@');
-        
-        for (let i = 0; i < data.length-1; i++) {
-          let data2 = data[i].split('||');
-          let created_at = data2[0];
-          let user = data2[1];
-          let sche_start = data2[2];
-          let sche_end = data2[3];
-          let comment = data2[4];
-          console.log(sche_start);
-          if(data[i]>="1"){
-            comments[comments.length] = "";  
-          }else{
-            comments[comments.length] = comment;
-          }
-          
-        }
-
-        
-        let zure = calendarZure(year, month);
-        let i;
-
-        if (zure != 6) {
-          for (i = 0; i < zure + 1; i++) {
-            dates[dates.length] = "";
-          }
-        }
-
-        for (i = 1; i <= monthLen[month - 1]; i++) {
-          dates[dates.length] = i;
-        }
-
-        if (dates.length != 37){
-          i = 36;
-          while (dates[i] === undefined){
-            dates[i] = "";
-            i--;
-          }
-        }
-      }else{
-        alert("Database Error");
-      }
-
-      output_d(dates);
-      output_c(comments);
-    }
-
-    // 指定した年、月を引数に入れると、月曜日からのズレを整数型で出力する。
-    // ズレが0の場合は月曜日始まり、ズレが5の場合は日曜日始まり。
-    function calendarZure(y, m){
-      let zure, i, cnt;
-      let monthLen_tmp = [ 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 ];
+      let zure, i;
+      let monthLen_tmp = monthLen;
 
       zure = (y - 1) * 365;
       zure = zure + y / 4;
@@ -841,7 +868,85 @@
         zure = zure % 7;
       }
 
-      return Math.floor(zure);
+      zure = Math.floor(zure);
+
+      //このままでは月曜日基準のzureなので、日曜日基準のzureに変える。
+      zure++;
+      if (zure >= 7){
+        zure = 0;
+      }
+
+      return zure;
+    }
+
+    // ZureCalendar関数によって得たズレを引数に入れると、日付と曜日が一致した、
+    // カレンダーの一番左上のマス（日曜日）を添字0とする配列が戻り値となる。
+    function MannnenCalendar(zure){
+      let dates = [];
+      let i;
+      let monthLen_tmp = monthLen;
+
+      for (i = 0; i < zure; i++) {
+        dates[dates.length] = "";
+      }
+
+      for (i = 1; i <= monthLen[month - 1]; i++) {
+        dates[dates.length] = i;
+      }
+
+      if (dates.length != 37){
+        i = 36;
+        while (dates[i] === undefined){
+          dates[i] = "";
+          i--;
+        }
+      }
+
+      return dates;
+    }
+
+    // time変数の年月の予定を取得し、output_d,n,c関数によって出力する。
+    async function reload(){
+      const response = await fetch("/download", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ group, time })
+      });
+      let result = await response.text();
+      if (result != 'Database Error'){
+
+        let zure = ZureCalendar(year, month);
+        let dates = MannnenCalendar(zure);
+        let users = new Array(37).fill(' ');
+        let comments = new Array(37).fill(' ');
+
+        let data = result.split('@@');
+        for (let i = 0; i < data.length-1; i++) {
+          let data2 = data[i].split('||');
+          let created_at = data2[0];
+          let user = data2[1];
+          let sche_start = data2[2];
+          let sche_end = data2[3];
+          let comment = data2[4];
+
+          console.log(sche_start);
+          let temp = sche_start.split('T');
+          let temp2 = temp[0].split('-');
+          let index = Number(temp2[2]) + zure - 1;
+
+          users[index] = user;
+          comments[index] = comment;
+          //th1_1.style.backgroundColor = '#bb4444'
+          //th1_2.style.backgroundColor = '#bb4444'
+        }
+
+        output_d(dates);
+        output_n(users);
+        output_c(comments);
+        
+      }else{
+        alert("Database Error");
+      }
     }
 
 
@@ -865,7 +970,6 @@
 
     document.querySelector("#update").onclick = async (event) => {
       await reload();
-      calendarZure(year, month);
     }
 
     document.querySelector("#back").onclick = async (event) => {
@@ -874,7 +978,8 @@
         year--;
         month = 12;
       }
-      time = `${year}-${month}`;
+      month_str = ('00' + month).slice(-2);
+      time = `${year}-${month_str}`;
       await reload();
     }
 
@@ -884,7 +989,8 @@
         year++;
         month = 1;
       }
-      time = `${year}-${month}`;
+      month_str = ('00' + month).slice(-2);
+      time = `${year}-${month_str}`;
       await reload();
     }
 
@@ -901,6 +1007,35 @@
       let result = await response.text();
       result_op.textContent = result;
     }
+
+
+
+
+
+
+
+
+
+    $(function () {
+      $('#d24').click(function(){
+        modalH_24.innerHTML = "見出し1";
+        modalP_24.innerHTML = "本文1<br>aaaaaaa";
+        $('#modalArea_24').fadeIn(200);
+      });
+      $('#closeModal_24 , #modalBg_24').click(function(){
+        $('#modalArea_24').fadeOut(200);
+      });
+
+
+      $('#d25').click(function(){
+        modalH_25.innerHTML = "見出し2";
+        modalP_25.innerHTML = "本文2<br>bbbbbbb";
+        $('#modalArea_25').fadeIn(200);
+      });
+      $('#closeModal_25 , #modalBg_25').click(function(){
+        $('#modalArea_25').fadeOut(200);
+      });
+    });
     
   </script>
 
