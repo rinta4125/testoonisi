@@ -777,7 +777,12 @@
           let sche_end = data2[3];
           let comment = data2[4];
           console.log(sche_start);
-          comments[comments.length] = comment;
+          if(data[i]==""){
+            comments[comments.length] = "";  
+          }else{
+            comments[comments.length] = comment;
+          }
+          
         }
 
         
