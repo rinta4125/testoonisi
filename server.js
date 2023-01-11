@@ -16,6 +16,7 @@ serve(async (req) => {
 
   if (req.method === "POST" && pathname === "/register") {
     const requestJson = await req.json();
+
     let sp = await supabase // userテーブルへ問い合わせ
       .from('user')
       .select()
@@ -34,7 +35,7 @@ serve(async (req) => {
 
       let sp2 = await supabase // userテーブルへ問い合わせ
         .from('user')
-        .insert({ group: `${rdm_group}`, username: `${requestJson.username}`, password: `${requestJson.password}` });
+        .insert({ group: `${rdm_group}`, username: `${requestJson.username}`, password: `${requestJson.password}`, color: `${requestJson.color}` });
       
       if (sp2.error == null) {
         return new Response('0'); // 新規登録成功と返す
@@ -57,7 +58,18 @@ serve(async (req) => {
     
     if (sp.error == null) { // エラーがないとき
       if (sp.data.length == 1){ // データベースに、対応するアカウントが１つある場合
-        return new Response(sp.data[0].username + "@@" + sp.data[0].group); // userカラムとgroupカラムを返す
+        if (login_check.length == 0) {
+          login_check.push(sp.data[0].username + "@@" + sp.data[0].group + "@@" + sp.data[0].color);
+    
+        } else {
+          while (login_check.length != 0) {
+            setTimeout( ()=>{}, 1000 );
+          }
+          login_check.push(sp.data[0].username + "@@" + sp.data[0].group + "@@" + sp.data[0].color);
+        }
+
+        return new Response('0'); // 0を返す
+
 
       }else if (sp.data.length < 1){ // データベースに、対応するアカウントがない場合
         return new Response('-1'); // ログイン失敗（エラー）と返す
@@ -71,21 +83,7 @@ serve(async (req) => {
     }
   }
 
-  if (req.method === "POST" && pathname === "/login_add") {
-    const requestJson = await req.json();
-
-    if (login_check.length == 0) {
-      login_check.push(requestJson.username + "@@" + requestJson.group);
-
-    } else {
-      while (login_check.length != 0) {
-        setTimeout( ()=>{}, 1000 );
-      }
-      login_check.push(requestJson.username + "@@" + requestJson.group);
-    }
-  }
-
-  if (req.method === "POST" && pathname === "/login_remove") {
+  if (req.method === "GET" && pathname === "/login") {
     let data = login_check.pop();
     login_check = [];
     return new Response(data);
@@ -100,7 +98,7 @@ serve(async (req) => {
     } else {
       sp = await supabase
         .from('calendar')
-        .insert({ group: `${requestJson.group}`, username: `${requestJson.username}`, sche_start: `${requestJson.sche_start}`, sche_end: `${requestJson.sche_end}`, comment: `${requestJson.comment}` }); // calendarへデータ挿入
+        .insert({ group: `${requestJson.group}`, username: `${requestJson.username}`, color: `${requestJson.colorID}`, sche_start: `${requestJson.sche_start}`, sche_end: `${requestJson.sche_end}`, comment: `${requestJson.comment}` }); // calendarへデータ挿入
     }
 
     if (sp.error == null) {
@@ -110,7 +108,7 @@ serve(async (req) => {
     }
   }
 
-  if (req.method === "POST" && pathname === "/download") {
+  if (req.method === "POST" && pathname === "/download_month") {
     const requestJson = await req.json();
     let group = requestJson.group;
     let time = requestJson.time;
@@ -123,8 +121,10 @@ serve(async (req) => {
       let data = '';
       for (let i = 0; i < sp.data.length; i++) {
         if (sp.data[i].sche_start.includes(`${time}`)){
+          data += sp.data[i].id + '||';
           data += sp.data[i].created_at + '||';
           data += sp.data[i].username + '||';
+          data += sp.data[i].color + '||';
           data += sp.data[i].sche_start + '||';
           data += sp.data[i].sche_end + '||';
           data += sp.data[i].comment + '@@';
@@ -135,6 +135,70 @@ serve(async (req) => {
       return new Response('Database Error');
     }
   }
+
+  if (req.method === "POST" && pathname === "/download_day") {
+    const requestJson = await req.json();
+    let group = requestJson.group;
+    let day = requestJson.day;
+    let sp = await supabase // calendarテーブルへ問い合わせ
+      .from('calendar')
+      .select()
+      .eq('group', group);
+    
+    if (sp.error == null) {
+      let data = '';
+      for (let i = 0; i < sp.data.length; i++) {
+        if (sp.data[i].sche_start.includes(`${day}`)){
+          data += sp.data[i].id + '||';
+          data += sp.data[i].created_at + '||';
+          data += sp.data[i].username + '||';
+          data += sp.data[i].color + '||';
+          data += sp.data[i].sche_start + '||';
+          data += sp.data[i].sche_end + '||';
+          data += sp.data[i].comment + '@@';
+        }
+      }
+      return new Response(data);
+    } else {
+      return new Response('Database Error');
+    }
+  }
+
+  if (req.method === "POST" && pathname === "/check_day_amount") {
+    const requestJson = await req.json();
+    let group = requestJson.group;
+    let day = requestJson.day;
+    let sp = await supabase // calendarテーブルへ問い合わせ
+      .from('calendar')
+      .select()
+      .eq('group', group);
+    
+    if (sp.error == null) {
+      let amount = 0;
+      for (let i = 0; i < sp.data.length; i++) {
+        if (sp.data[i].sche_start.includes(`${day}`)){
+          amount = amount + 1;
+        }
+      }
+      return new Response(amount);
+    } else {
+      return new Response('Database Error');
+    }
+  }
+
+  if (req.method === "POST" && pathname === "/delete") {
+    const requestJson = await req.json();
+    let sp = await supabase // calendarテーブルへ問い合わせ
+      .from('calendar')
+      .delete()
+      .match({ id: `${requestJson.id}` });
+
+    if (sp.error == null) {
+      return new Response('successfully');
+    } else{
+      return new Response('Database Error');
+    }
+  };
 
 
 
@@ -161,18 +225,6 @@ serve(async (req) => {
     if (obj.error == null) {
       let max_id = obj.data.length-1;
       return new Response(max_id);
-    }
-  };
-
-  // 投稿を削除
-  if (req.method === "POST" && pathname === "/code_info_del") {
-    const requestJson = await req.json();
-    let id_del = Number(requestJson.id);
-    obj = await supabase.from('calendar').select();
-    if (obj.error == null) {
-      let id = obj.data[id_del].id;
-      obj = await supabase.from('calendar').delete().match({ id });
-      return new Response(id_del-1);
     }
   };
 
